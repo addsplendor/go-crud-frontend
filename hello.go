@@ -25,7 +25,12 @@ func (h *hello) Render() app.UI {
 			Posts: h.Posts,
 		},
 		app.Button().Text("Hello World!").OnClick(func(ctx app.Context, e app.Event) {
-
+			h.Posts = append(h.Posts, blogPost{
+				title:   "The redundant array",
+				author:  "Addie Daria",
+				content: "Junior baby programmer learn how write good",
+				date:    time.Now(),
+			})
 		}),
 	)
 
@@ -50,7 +55,13 @@ type blogPost struct {
 func renderBlogPost(blogPost blogPost) app.UI {
 	return app.Div().Body(
 		app.H1().Text(blogPost.title),
-		app.H3().Text(fmt.Sprintf("%s %s", blogPost.author, blogPost.date)),
+		app.H3().Text(fmt.Sprintf("%s %s", blogPost.author, fmt.Sprintf("%d-%d-%d %d:%02d\n",
+			blogPost.date.Year(),
+			blogPost.date.Month(),
+			blogPost.date.Day(),
+			blogPost.date.Hour(),
+			blogPost.date.Minute()),
+		)),
 		app.P().Text(blogPost.content).Style("background-color", "blue"),
 	)
 }
