@@ -8,13 +8,9 @@ type postList struct {
 }
 
 func (p *postList) Render() app.UI {
-	var postUIs = []app.UI{}
 
-	for _, post := range p.posts {
-		var postUI = renderBlogPost(post)
-		postUIs = append(postUIs, postUI)
-		app.Logf("Posts: %v\n", post)
-	}
-
-	return app.Div().Body(postUIs...)
+	return app.Div().Body(
+		app.Range(p.posts).Slice(func(i int) app.UI {
+			return renderBlogPost(p.posts[i])
+		}))
 }
