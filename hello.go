@@ -11,34 +11,18 @@ import (
 // embedding app.Compo into a struct.
 type hello struct {
 	app.Compo
-	posts []blogPost
+	Posts []blogPost
 }
 
 // The Render method is where the component appearance is defined. Here, a
 // "Hello World!" is displayed as a heading.
 func (h *hello) Render() app.UI {
-	// temporarily hardcode the data!
-	h.posts = []blogPost{
-		blogPost{
-			title:   "The Downfall of Neo-Noir",
-			author:  "Addie Daria",
-			content: "Pretentious drivel",
-			date:    time.Date(2023, time.May, 25, 18, 50, 00, 05, time.Local),
-		},
 
-		blogPost{
-			title:   "Why Carrots are Problematic",
-			author:  "Addie Daria",
-			content: "AGGGGGGGGHHHHHHHHHHH",
-			date:    time.Date(2023, time.May, 31, 12, 26, 00, 00, time.Local),
-		},
-	}
-
-	app.Logf("%d Posts: %v\n", len(h.posts), h.posts)
+	app.Logf("%d Posts: %v\n", len(h.Posts), h.Posts)
 
 	return app.Div().Body(
-		&postList{
-			posts: h.posts,
+		&PostList{
+			Posts: h.Posts,
 		},
 		app.Button().Text("Hello World!").OnClick(func(ctx app.Context, e app.Event) {
 
@@ -69,4 +53,24 @@ func renderBlogPost(blogPost blogPost) app.UI {
 		app.H3().Text(fmt.Sprintf("%s %s", blogPost.author, blogPost.date)),
 		app.P().Text(blogPost.content).Style("background-color", "blue"),
 	)
+}
+
+func (h *hello) OnMount(ctx app.Context) {
+	// temporarily hardcode the data!
+	h.Posts = []blogPost{
+		blogPost{
+			title:   "The Downfall of Neo-Noir",
+			author:  "Addie Daria",
+			content: "Pretentious drivel",
+			date:    time.Date(2023, time.May, 25, 18, 50, 00, 05, time.Local),
+		},
+
+		blogPost{
+			title:   "Why Carrots are Problematic",
+			author:  "Addie Daria",
+			content: "AGGGGGGGGHHHHHHHHHHH",
+			date:    time.Date(2023, time.May, 31, 12, 26, 00, 00, time.Local),
+		},
+	}
+	h.Update()
 }

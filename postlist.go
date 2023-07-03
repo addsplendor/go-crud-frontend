@@ -2,15 +2,15 @@ package main
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
-type postList struct {
+type PostList struct {
 	app.Compo
-	posts []blogPost
+	Posts []blogPost
 }
 
-func (p *postList) Render() app.UI {
+func (p *PostList) Render() app.UI {
 
 	return app.Div().Body(
-		app.Range(p.posts).Slice(func(i int) app.UI {
-			return renderBlogPost(p.posts[i])
+		app.Range(p.Posts).Slice(func(i int) app.UI {
+			return renderBlogPost(p.Posts[i])
 		}))
 }
