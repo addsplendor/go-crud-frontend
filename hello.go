@@ -36,20 +36,14 @@ func (h *hello) Render() app.UI {
 
 	app.Logf("%d Posts: %v\n", len(h.posts), h.posts)
 
-	var postUIs = []app.UI{}
+	return app.Div().Body(
+		&postList{
+			posts: h.posts,
+		},
+		app.Button().Text("Hello World!").OnClick(func(ctx app.Context, e app.Event) {
 
-	for _, post := range h.posts {
-		var postUI = renderBlogPost(post)
-		postUIs = append(postUIs, postUI)
-		app.Logf("Posts: %v\n", post)
-	}
-
-	postUIs = append(postUIs, app.Button().Text("Hello World!").OnClick(func(ctx app.Context, e app.Event) {
-
-	}))
-
-	app.Logf("%d Posts:, %v\n", len(postUIs), postUIs)
-	return app.Div().Body(postUIs...)
+		}),
+	)
 
 	//return app.Div().Body(
 	//	app.Div(),
