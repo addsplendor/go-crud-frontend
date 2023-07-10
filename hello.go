@@ -32,6 +32,10 @@ func (h *hello) Render() app.UI {
 				date:    time.Now(),
 			})
 		}),
+
+		&submit{
+
+		},
 	)
 
 	//return app.Div().Body(
