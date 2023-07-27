@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
+	"io"
+	"net/http"
 	"time"
 )
 
@@ -25,11 +27,28 @@ func (h *hello) Render() app.UI {
 			Posts: h.Posts,
 		},
 		app.Button().Text("Hello World!").OnClick(func(ctx app.Context, e app.Event) {
-			h.Posts = append(h.Posts, blogPost{
-				title:   "The redundant array",
-				author:  "Addie Daria",
-				content: "Junior baby programmer learn how write good",
-				date:    time.Now(),
+			//h.Posts = append(h.Posts, blogPost{
+			//	title:   "The redundant array",
+			//	author:  "Addie Daria",
+			//	content: "Junior baby programmer learn how write good",
+			//	date:    time.Now(),
+			//})
+
+			ctx.Async(func() {
+				r, err := http.Get("http://localhost:8080/posts")
+				if err != nil {
+					app.Log(err)
+					return
+				}
+				defer r.Body.Close()
+
+				b, err := io.ReadAll(r.Body)
+				if err != nil {
+					app.Log(err)
+					return
+				}
+
+				app.Logf("request response: %s", b)
 			})
 		}),
 

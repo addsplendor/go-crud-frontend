@@ -32,12 +32,22 @@ func main() {
 	// The Handler is an HTTP handler that serves the client and all its
 	// required resources to make it work into a web browser. Here it is
 	// configured to handle requests with a path that starts with "/".
-	http.Handle("/", &app.Handler{
+	handler := &app.Handler{
 		Name:        "Hello",
 		Description: "An Hello World! example",
-	})
+	}
+
+	http.Handle("/", http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		enableCors(&writer)
+		handler.ServeHTTP(writer, request)
+	}))
 
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatal(err)
 	}
+
 }
+
+	func enableCors(w *http.ResponseWriter) {
+		(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	}
